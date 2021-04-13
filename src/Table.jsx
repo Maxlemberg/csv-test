@@ -1,0 +1,94 @@
+import React from "react";
+import NotCorect from "./NotCorect";
+import format from "date-fns/format";
+// import { getDay } from "date-fns";
+
+const Table = ({ isIncorect, data }) => {
+  let dateArr;
+  if (!isIncorect) {
+    dateArr = data.map((item, index) => {
+      const phone = "+1" + item.phone;
+      const age = parseInt(item.age);
+      const experience = parseInt(item.experience);
+      const yearlyincome = parseInt(item.yearlyincome) / 100;
+      const licensestates = item.licensestates
+        .split(" ")
+        .map((item) => item.slice(0, 3))
+        .join("|");
+      const expirationdate = item.expirationdate;
+      const haschildren = String(item.haschildren);
+      const licensenumber = item.licensenumber;
+      console.log(typeof item.haschildren);
+
+      const ageStyle = ["info"];
+      const expStyle = ["info"];
+      const incStyle = ["info"];
+      const dateStyle = ["info"];
+      const phoneStyle = ["info"];
+      const childrenStyle = ["info"];
+      const licenseStyle = ["info"];
+      item.age < 21 && ageStyle.push("infoAge");
+      item.experience > 21 && expStyle.push("infoAge");
+      item.yearlyincome > 1000000 && incStyle.push("infoAge");
+      item.phone.length > 10 && phoneStyle.push("infoAge");
+      item.haschildren !== "true"
+        ? childrenStyle.push("infoAge")
+        : childrenStyle.push("");
+      if (
+        item.expirationdate !==
+          format(new Date(item.expirationdate), "yyyy-MM-dd") ||
+        item.expirationdate !==
+          format(new Date(item.expirationdate), "MM/dd/yyyy)")
+      ) {
+        dateStyle.push("infoAge");
+      }
+      //   item.licensenumber;
+      return (
+        <tr key={index}>
+          <td className="info">{index + 1}</td>
+          <td className="info">{item.fullname}</td>
+          <td className={phoneStyle.join(" ")}>{phone}</td>
+          <td className="info">{item.email.toLowerCase()}</td>
+          <td className={ageStyle.join(" ")}>{age}</td>
+          <td className={expStyle.join(" ")}>{experience}</td>
+          <td className={incStyle.join(" ")}>{yearlyincome}</td>
+          <td className={childrenStyle.join(" ")}>{haschildren}</td>
+          <td className="info">{licensestates}</td>
+          <td className={dateStyle.join(" ")}>{expirationdate}</td>
+          <td className={licenseStyle.join(" ")}>{licensenumber}</td>
+          <td className="info"></td>
+        </tr>
+      );
+    });
+  }
+
+  return (
+    <>
+      {isIncorect ? (
+        <NotCorect />
+      ) : (
+        <table className="table">
+          <thead className="tableData">
+            <tr className="tableData">
+              <th className="head">ID</th>
+              <th className="head">Full Name</th>
+              <th className="head">Phone</th>
+              <th className="head">Email</th>
+              <th className="head">Age</th>
+              <th className="head">Experience</th>
+              <th className="head">Yearly Income</th>
+              <th className="head">Has children</th>
+              <th className="head">License states</th>
+              <th className="head">Expiration date</th>
+              <th className="head">License number</th>
+              <th className="head">Duplicate with</th>
+            </tr>
+          </thead>
+          <tbody className="tableData">{dateArr}</tbody>
+        </table>
+      )}
+    </>
+  );
+};
+
+export default Table;
