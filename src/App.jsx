@@ -9,6 +9,7 @@ class App extends Component {
   state = {
     arr: [],
     isNotCorect: false,
+    duplicateEmail: [],
   };
 
   handleOpenDialog = (e) => {
@@ -18,23 +19,36 @@ class App extends Component {
   };
 
   handleOnFileLoad = (data, fileInfo) => {
-    // console.log("DATA", data);
     if (!fileInfo.name.includes("csv")) {
       this.setState({ isNotCorect: true });
     }
+
     const parseData = data.map((item) => item.data);
-    // console.log("parseData", parseData);
+
+    parseData.reduce((acc, { fullname, phone, email }) => {
+      !fullname && this.setState({ isNotCorect: true });
+      !phone && this.setState({ isNotCorect: true });
+      !email && this.setState({ isNotCorect: true });
+
+      return [
+        ...acc,
+        acc.includes(email)
+          ? this.setState(email, {
+              duplicateEmail: [this.state.duplicateEmail, email],
+            })
+          : "",
+      ];
+    }, []);
 
     this.setState({ arr: parseData });
   };
 
-  handleOnError = (err, file, inputElem, reason) => {
+  handleOnError = (err) => {
     console.log("Err");
     console.log(err);
   };
 
   handleOnRemoveFile = (data) => {
-    console.log("Delate");
     this.setState({ arr: [], isNotCorect: false });
   };
 
@@ -53,8 +67,6 @@ class App extends Component {
   };
 
   render() {
-    // console.log(new Date());
-    // console.log(new Date().toLocaleString());
     return (
       <>
         <div className="container">
@@ -64,17 +76,12 @@ class App extends Component {
             onError={this.handleOnError}
             noClick
             noDrag
-            // progressBarColor=''
             config={{
               header: true,
               skipEmptyLines: true,
               transform: this.handleTransform,
               transformHeader: this.handleHader,
-              // chunk: this.handleChanke,
-              // step: (results, parser) => {
-              // for (const key of results.data) {
-              //   key.split(" ").join("").toLowerCase();
-              // }
+              dynamicTyping: true,
             }}
             onRemoveFile={this.handleOnRemoveFile}
           >
@@ -90,18 +97,20 @@ class App extends Component {
                     onClick={this.handleOpenDialog}
                     className="btn"
                   >
-                    Import users
+                    Import users 🗄️
                   </button>
                 )}
               </aside>
             )}
           </CSVReader>
-          {/* {this.state.isNotCorect && <NotCorect/> } */}
-
           {this.state.arr.length ? (
-            <Table isIncorect={this.state.isNotCorect} data={this.state.arr} />
+            <Table
+              isIncorect={this.state.isNotCorect}
+              data={this.state.arr}
+              duplicate={this.state.duplicateEmail}
+            />
           ) : (
-            <h1 className="title">Загрузіть файл</h1>
+            <h1 className="title">Загрузіть файл 📁 </h1>
           )}
         </div>
       </>

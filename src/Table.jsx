@@ -3,7 +3,8 @@ import NotCorect from "./NotCorect";
 import format from "date-fns/format";
 // import { getDay } from "date-fns";
 
-const Table = ({ isIncorect, data }) => {
+const Table = ({ isIncorect, data, duplicate }) => {
+  console.log(duplicate);
   let dateArr;
   if (!isIncorect) {
     dateArr = data.map((item, index) => {
@@ -13,12 +14,13 @@ const Table = ({ isIncorect, data }) => {
       const yearlyincome = parseInt(item.yearlyincome) / 100;
       const licensestates = item.licensestates
         .split(" ")
-        .map((item) => item.slice(0, 3))
+        .map((item) => item.slice(0, 2))
         .join("|");
+
       const expirationdate = item.expirationdate;
+
       const haschildren = String(item.haschildren);
       const licensenumber = item.licensenumber;
-      console.log(typeof item.haschildren);
 
       const ageStyle = ["info"];
       const expStyle = ["info"];
@@ -27,22 +29,28 @@ const Table = ({ isIncorect, data }) => {
       const phoneStyle = ["info"];
       const childrenStyle = ["info"];
       const licenseStyle = ["info"];
+
       item.age < 21 && ageStyle.push("infoAge");
       item.experience > 21 && expStyle.push("infoAge");
       item.yearlyincome > 1000000 && incStyle.push("infoAge");
       item.phone.length > 10 && phoneStyle.push("infoAge");
-      item.haschildren !== "true"
-        ? childrenStyle.push("infoAge")
-        : childrenStyle.push("");
+
+      // console.log(typeof item.haschildren);
+      typeof item.haschildren === "boolean"
+        ? childrenStyle.push("")
+        : childrenStyle.push("infoAge");
+
       if (
-        item.expirationdate !==
+        item.expirationdate ===
           format(new Date(item.expirationdate), "yyyy-MM-dd") ||
-        item.expirationdate !==
-          format(new Date(item.expirationdate), "MM/dd/yyyy)")
+        item.expirationdate ===
+          format(new Date(item.expirationdate), "MM/dd/yyyy")
       ) {
+        dateStyle.push("");
+      } else {
         dateStyle.push("infoAge");
       }
-      //   item.licensenumber;
+
       return (
         <tr key={index}>
           <td className="info">{index + 1}</td>

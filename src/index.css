@@ -55,6 +55,7 @@ body {
 }
 
 .table {
+  border-collapse: collapse;
   width: 1200px;
   margin: auto;
   /* background-color: rgb(176, 176, 253); */
@@ -70,6 +71,7 @@ body {
   text-transform: uppercase;
   padding: 5px 10px;
   border: 2px solid black;
+  background-color: rgb(228, 195, 10);
 }
 
 .info {
@@ -77,6 +79,7 @@ body {
   border: 2px solid black;
   font-weight: 400;
   height: 30px;
+  background-color: rgb(202, 230, 179);
 }
 
 .title {
@@ -101,5 +104,6 @@ body {
 }
 
 .infoAge {
-  background-color: red;
+  background-color: rgb(151, 2, 2);
+  color: white;
 }
