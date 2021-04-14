@@ -1,13 +1,19 @@
 import React from "react";
 import NotCorect from "./NotCorect";
 import format from "date-fns/format";
-// import { getDay } from "date-fns";
 
-const Table = ({ isIncorect, data, duplicate }) => {
-  console.log(duplicate);
-  let dateArr;
+const Table = ({ isIncorect, data, duplicateEmail }) => {
+  console.log(duplicateEmail);
+
+  let dataArr;
+
   if (!isIncorect) {
-    dateArr = data.map((item, index) => {
+    dataArr = data.map((item, index) => {
+      const idx = duplicateEmail.reduce(
+        (acc, data) => (data.email === item.email ? (acc = data.index) : ""),
+        ""
+      );
+
       const phone = "+1" + item.phone;
       const age = parseInt(item.age);
       const experience = parseInt(item.experience);
@@ -15,10 +21,9 @@ const Table = ({ isIncorect, data, duplicate }) => {
       const licensestates = item.licensestates
         .split(" ")
         .map((item) => item.slice(0, 2))
-        .join("|");
+        .join(" | ");
 
       const expirationdate = item.expirationdate;
-
       const haschildren = String(item.haschildren);
       const licensenumber = item.licensenumber;
 
@@ -35,7 +40,6 @@ const Table = ({ isIncorect, data, duplicate }) => {
       item.yearlyincome > 1000000 && incStyle.push("infoAge");
       item.phone.length > 10 && phoneStyle.push("infoAge");
 
-      // console.log(typeof item.haschildren);
       typeof item.haschildren === "boolean"
         ? childrenStyle.push("")
         : childrenStyle.push("infoAge");
@@ -64,7 +68,7 @@ const Table = ({ isIncorect, data, duplicate }) => {
           <td className="info">{licensestates}</td>
           <td className={dateStyle.join(" ")}>{expirationdate}</td>
           <td className={licenseStyle.join(" ")}>{licensenumber}</td>
-          <td className="info"></td>
+          <td className="info">{idx && idx + 1}</td>
         </tr>
       );
     });
@@ -92,7 +96,7 @@ const Table = ({ isIncorect, data, duplicate }) => {
               <th className="head">Duplicate with</th>
             </tr>
           </thead>
-          <tbody className="tableData">{dateArr}</tbody>
+          <tbody className="tableData">{dataArr}</tbody>
         </table>
       )}
     </>

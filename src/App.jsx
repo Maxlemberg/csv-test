@@ -10,6 +10,7 @@ class App extends Component {
     arr: [],
     isNotCorect: false,
     duplicateEmail: [],
+    // duplicatePhone: [],
   };
 
   handleOpenDialog = (e) => {
@@ -25,20 +26,31 @@ class App extends Component {
 
     const parseData = data.map((item) => item.data);
 
-    parseData.reduce((acc, { fullname, phone, email }) => {
+    let dataEmail = [];
+    let dataPhone = [];
+
+    this.setState({ duplicateEmail: [], duplicatePhone: [] });
+
+    parseData.forEach(({ fullname, phone, email }, index) => {
       !fullname && this.setState({ isNotCorect: true });
       !phone && this.setState({ isNotCorect: true });
       !email && this.setState({ isNotCorect: true });
 
-      return [
-        ...acc,
-        acc.includes(email)
-          ? this.setState(email, {
-              duplicateEmail: [this.state.duplicateEmail, email],
-            })
-          : "",
-      ];
-    }, []);
+      dataEmail.includes(email)
+        ? this.setState({
+            duplicateEmail: [
+              ...this.state.duplicateEmail,
+              { email: email, index: index },
+            ],
+          })
+        : dataEmail.push(email);
+
+      dataPhone.includes(phone)
+        ? this.setState({
+            duplicatePhone: [...this.state.duplicatePhone, index],
+          })
+        : dataPhone.push(phone);
+    });
 
     this.setState({ arr: parseData });
   };
@@ -107,7 +119,8 @@ class App extends Component {
             <Table
               isIncorect={this.state.isNotCorect}
               data={this.state.arr}
-              duplicate={this.state.duplicateEmail}
+              duplicateEmail={this.state.duplicateEmail}
+              // duplicatePhone={this.state.duplicatePhone}
             />
           ) : (
             <h1 className="title">Загрузіть файл 📁 </h1>
