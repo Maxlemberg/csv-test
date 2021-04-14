@@ -3,16 +3,18 @@ import NotCorect from "./NotCorect";
 import format from "date-fns/format";
 
 const Table = ({ isIncorect, data, duplicateEmail }) => {
-  console.log(duplicateEmail);
-
   let dataArr;
 
   if (!isIncorect) {
     dataArr = data.map((item, index) => {
-      const idx = duplicateEmail.reduce(
-        (acc, data) => (data.email === item.email ? (acc = data.index) : ""),
-        ""
-      );
+      let idx;
+      data.forEach((res, i) => {
+        if (res.email === item.email || res.phone === item.phone) {
+          if (i !== index) {
+            idx = i + 1;
+          }
+        }
+      });
 
       const phone = "+1" + item.phone;
       const age = parseInt(item.age);
@@ -68,7 +70,7 @@ const Table = ({ isIncorect, data, duplicateEmail }) => {
           <td className="info">{licensestates}</td>
           <td className={dateStyle.join(" ")}>{expirationdate}</td>
           <td className={licenseStyle.join(" ")}>{licensenumber}</td>
-          <td className="info">{idx && idx + 1}</td>
+          <td className="info">{idx && idx}</td>
         </tr>
       );
     });

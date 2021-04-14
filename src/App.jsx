@@ -9,8 +9,6 @@ class App extends Component {
   state = {
     arr: [],
     isNotCorect: false,
-    duplicateEmail: [],
-    // duplicatePhone: [],
   };
 
   handleOpenDialog = (e) => {
@@ -26,30 +24,12 @@ class App extends Component {
 
     const parseData = data.map((item) => item.data);
 
-    let dataEmail = [];
-    let dataPhone = [];
-
     this.setState({ duplicateEmail: [], duplicatePhone: [] });
 
     parseData.forEach(({ fullname, phone, email }, index) => {
       !fullname && this.setState({ isNotCorect: true });
       !phone && this.setState({ isNotCorect: true });
       !email && this.setState({ isNotCorect: true });
-
-      dataEmail.includes(email)
-        ? this.setState({
-            duplicateEmail: [
-              ...this.state.duplicateEmail,
-              { email: email, index: index },
-            ],
-          })
-        : dataEmail.push(email);
-
-      dataPhone.includes(phone)
-        ? this.setState({
-            duplicatePhone: [...this.state.duplicatePhone, index],
-          })
-        : dataPhone.push(phone);
     });
 
     this.setState({ arr: parseData });
@@ -116,12 +96,7 @@ class App extends Component {
             )}
           </CSVReader>
           {this.state.arr.length ? (
-            <Table
-              isIncorect={this.state.isNotCorect}
-              data={this.state.arr}
-              duplicateEmail={this.state.duplicateEmail}
-              // duplicatePhone={this.state.duplicatePhone}
-            />
+            <Table isIncorect={this.state.isNotCorect} data={this.state.arr} />
           ) : (
             <h1 className="title">Загрузіть файл 📁 </h1>
           )}
