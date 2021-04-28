@@ -2,7 +2,7 @@ import React from "react";
 import NotCorect from "./NotCorect";
 import format from "date-fns/format";
 
-const Table = ({ isIncorect, data, duplicateEmail }) => {
+const Table = ({ isIncorect, data }) => {
   let dataArr;
 
   if (!isIncorect) {
@@ -16,13 +16,25 @@ const Table = ({ isIncorect, data, duplicateEmail }) => {
         }
       });
 
-      const phone = "+1" + item.phone;
+      let phone = item.phone;
+
+      if (!item.phone.toString().includes("+1")) {
+        phone = "+1" + item.phone;
+      }
+
+      console.log(item.licensestates);
+
+      // if(item.phone){};
       const age = parseInt(item.age);
       const experience = parseInt(item.experience);
       const yearlyincome = parseInt(item.yearlyincome) / 100;
+
       const licensestates = item.licensestates
-        .split(" ")
-        .map((item) => item.slice(0, 2))
+        .split(",")
+        .map((item) => {
+          // console.log(item);
+          return item.slice(0, 2);
+        })
         .join(" | ");
 
       const expirationdate = item.expirationdate;

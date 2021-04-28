@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { CSVReader } from "react-papaparse";
-import "./index.css";
 import Table from "./Table";
+import { CSSTransition } from "react-transition-group";
 
 const buttonRef = React.createRef();
 
@@ -9,6 +9,7 @@ class App extends Component {
   state = {
     arr: [],
     isNotCorect: false,
+    isActive: false,
   };
 
   handleOpenDialog = (e) => {
@@ -24,7 +25,7 @@ class App extends Component {
 
     const parseData = data.map((item) => item.data);
 
-    this.setState({ duplicateEmail: [], duplicatePhone: [] });
+    this.setState((state) => ({ isActive: true }));
 
     parseData.forEach(({ fullname, phone, email }, index) => {
       !fullname && this.setState({ isNotCorect: true });
@@ -41,7 +42,7 @@ class App extends Component {
   };
 
   handleOnRemoveFile = (data) => {
-    this.setState({ arr: [], isNotCorect: false });
+    this.setState({ arr: [], isNotCorect: false, isActive: false });
   };
 
   handleRemoveFile = (e) => {
@@ -60,7 +61,7 @@ class App extends Component {
 
   render() {
     return (
-      <>
+      <CSSTransition in={true} appear={true} timeout={250} classNames="anim">
         <div className="container">
           <CSVReader
             ref={buttonRef}
@@ -95,13 +96,26 @@ class App extends Component {
               </aside>
             )}
           </CSVReader>
-          {this.state.arr.length ? (
+
+          <CSSTransition
+            in={this.state.isActive}
+            timeout={250}
+            classNames="fade"
+            unmountOnExit
+          >
             <Table isIncorect={this.state.isNotCorect} data={this.state.arr} />
-          ) : (
+          </CSSTransition>
+
+          <CSSTransition
+            in={!this.state.arr.length}
+            timeout={250}
+            classNames="h1"
+            unmountOnExit
+          >
             <h1 className="title">Загрузіть файл 📁 </h1>
-          )}
+          </CSSTransition>
         </div>
-      </>
+      </CSSTransition>
     );
   }
 }

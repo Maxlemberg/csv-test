@@ -107,3 +107,57 @@ body {
   background-color: rgb(151, 2, 2);
   color: white;
 }
+
+.fade-enter {
+  opacity: 0;
+  /* transform: translateX(100%); */
+}
+
+.fade-enter-active {
+  opacity: 1;
+  /* transform: translateX(0); */
+  transition: opacity 250ms linear;
+}
+
+.fade-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  /* transform: translateX(-100%); */
+  /* transition: all 250ms linear; */
+}
+
+.anim-appear {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.anim-appear-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 250ms linear;
+}
+
+.h1-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.h1-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 250ms linear;
+}
+
+.h1-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.h1-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: all 250ms ease-in-out;
+}
